@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>АСОБ Облако — визуальное ТЗ и тесты AI</title>
+<style>
+:root {
+  --bg: #fafaf8;
+  --bg-surface: #ffffff;
+  --bg-soft: #f3f1ec;
+  --text: #1a1a1a;
+  --text-muted: #666;
+  --text-tertiary: #999;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.15);
+  --accent: #534AB7;
+  --accent-soft: #EEEDFE;
+  --teal: #0F6E56;
+  --teal-soft: #E1F5EE;
+  --coral: #993C1D;
+  --coral-soft: #FAECE7;
+  --amber: #854F0B;
+  --amber-soft: #FAEEDA;
+  --green: #3B6D11;
+  --green-soft: #EAF3DE;
+  --red: #A32D2D;
+  --red-soft: #FCEBEB;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.hero {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 32px;
+  margin-bottom: 48px;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  margin-top: 64px;
+  margin-bottom: 24px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+p {
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+
+.hero p.lead {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text);
+  max-width: 780px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.stat {
+  background: var(--bg-soft);
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.problem-box {
+  background: var(--coral-soft);
+  border-left: 3px solid var(--coral);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 24px 0;
+}
+
+.problem-box strong {
+  color: var(--coral);
+  font-weight: 500;
+}
+
+.solution-box {
+  background: var(--teal-soft);
+  border-left: 3px solid var(--teal);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 24px 0;
+}
+
+.solution-box strong {
+  color: var(--teal);
+  font-weight: 500;
+}
+
+.info-box {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 24px 0;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.info-box strong { color: var(--accent); font-weight: 500; }
+
+.arch-diagram {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  min-width: 720px;
+}
+
+.arch-col h4 {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.arch-block {
+  background: var(--bg-soft);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.arch-block.primary {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.arch-block.tenant {
+  background: var(--teal-soft);
+  color: var(--teal);
+}
+
+.arch-block.user {
+  background: var(--coral-soft);
+  color: var(--coral);
+}
+
+.arch-block small {
+  display: block;
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+.mockup-wrap {
+  background: var(--bg-soft);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.mockup-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.mockup {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.mockup-browser-bar {
+  background: #f5f4f0;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mockup-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.mockup-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d3d1c7;
+}
+
+.mockup-url {
+  flex: 1;
+  text-align: center;
+  font-family: monospace;
+}
+
+.mockup-body {
+  padding: 16px;
+  min-height: 280px;
+}
+
+.client-mockup .m-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.client-mockup .m-brand {
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--teal);
+}
+
+.client-mockup .m-user {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.m-project-card {
+  background: var(--bg-soft);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.m-project-card .m-title {
+  font-weight: 500;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.m-project-card .m-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.m-chat { margin-top: 16px; }
+
+.m-msg {
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  max-width: 85%;
+}
+
+.m-msg.them {
+  background: var(--bg-soft);
+  border-bottom-left-radius: 2px;
+}
+
+.m-msg.me {
+  background: var(--accent-soft);
+  color: var(--accent);
+  margin-left: auto;
+  border-bottom-right-radius: 2px;
+}
+
+.m-input {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.m-input-mic { color: var(--accent); }
+
+.admin-mockup .m-sidebar-layout {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  min-height: 260px;
+}
+
+.admin-mockup .m-sidebar {
+  background: var(--bg-soft);
+  padding: 12px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.admin-mockup .m-sidebar-item {
+  padding: 6px 8px;
+  color: var(--text-muted);
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.admin-mockup .m-sidebar-item.active {
+  background: white;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.admin-mockup table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.admin-mockup th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 500;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.admin-mockup td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.pill-wait { background: var(--amber-soft); color: var(--amber); }
+.pill-ok { background: var(--teal-soft); color: var(--teal); }
+.pill-active { background: var(--accent-soft); color: var(--accent); }
+
+.mockup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 760px) {
+  .mockup-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .arch-grid { min-width: 600px; }
+}
+
+.funnel {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  margin: 24px 0;
+}
+
+.funnel-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 14px 10px;
+  border-radius: 8px;
+}
+
+.funnel-step .num {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.funnel-step .title {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.funnel-step .desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 760px) {
+  .funnel { grid-template-columns: 1fr 1fr; }
+}
+
+.ai-table {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.ai-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 1fr 180px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+  font-size: 13px;
+  align-items: start;
+}
+
+.ai-row:last-child { border-bottom: none; }
+
+.ai-row.head {
+  background: var(--bg-soft);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.ai-name {
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.ai-small {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.stack-tag {
+  display: inline-block;
+  background: var(--bg-soft);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin: 2px 2px 0 0;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+@media (max-width: 760px) {
+  .ai-row { grid-template-columns: 1fr; gap: 8px; }
+  .ai-row.head { display: none; }
+}
+
+.roadmap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.week {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.week-num {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.week h4 {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.week ul {
+  list-style: none;
+  padding: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.week li {
+  padding: 3px 0;
+  padding-left: 14px;
+  position: relative;
+}
+
+.week li::before {
+  content: "·";
+  position: absolute;
+  left: 4px;
+  color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .roadmap { grid-template-columns: 1fr; }
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.price-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.price-card.highlight {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.price-card h4 {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+
+.price-card .price {
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.price-card.highlight .price { color: var(--accent); }
+
+.price-card .period {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.price-card ul {
+  list-style: none;
+  padding: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.price-card li {
+  padding: 4px 0;
+}
+
+.price-card li::before {
+  content: "✓ ";
+  color: var(--teal);
+  margin-right: 4px;
+}
+
+@media (max-width: 760px) {
+  .price-grid { grid-template-columns: 1fr; }
+}
+
+/* AI Test section */
+.test-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 24px 0;
+}
+
+.test-title {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.test-prompt {
+  background: var(--bg-soft);
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 20px;
+  border-left: 3px solid var(--accent);
+}
+
+.test-prompt-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-family: -apple-system, sans-serif;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.compare-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.compare-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.compare-model {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.verdict {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.verdict-bad { background: var(--red-soft); color: var(--red); }
+.verdict-ok { background: var(--teal-soft); color: var(--teal); }
+.verdict-neutral { background: var(--amber-soft); color: var(--amber); }
+
+.compare-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: white;
+  display: block;
+}
+
+.compare-fake-image {
+  background: var(--bg-soft);
+  border: 2px dashed var(--border-strong);
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.compare-fake-image .fake-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.compare-fake-image .fake-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.compare-notes {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.compare-notes strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.compare-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.compare-meta span { display: inline-flex; gap: 4px; align-items: center; }
+.compare-meta strong { color: var(--text); font-weight: 500; }
+
+@media (max-width: 760px) {
+  .compare-grid { grid-template-columns: 1fr; }
+}
+
+.arrow-between {
+  text-align: center;
+  margin: 16px 0;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+/* Economy table */
+.economy {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.economy table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.economy th {
+  text-align: left;
+  padding: 10px 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+
+.economy th.num { text-align: right; }
+
+.economy td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.economy td.num {
+  text-align: right;
+  font-family: monospace;
+  font-weight: 500;
+}
+
+.economy tr:last-child td { border-bottom: none; }
+
+.economy tr.total td {
+  background: var(--bg-soft);
+  font-weight: 500;
+  color: var(--text);
+  border-top: 2px solid var(--border-strong);
+}
+
+.onboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.onboard-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+
+.onboard-item strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.onboard-item span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 760px) {
+  .onboard { grid-template-columns: 1fr; }
+}
+
+footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<section class="hero">
+  <div class="badge">B2B SaaS · малоэтажное строительство · Geron Labs</div>
+  <h1>АСОБ Облако</h1>
+  <p class="lead">Платформа по подписке для строительных компаний, которая сокращает выдачу КП и сметы клиенту с 3-4 дней до часов. Работает через AI-ассистента в личном кабинете клиента и единую рабочую среду для сотрудников стройкомпании.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Подписка с компании</div><div class="stat-value">10-15К ₽/мес</div></div>
+    <div class="stat"><div class="stat-label">Целевые тенанты</div><div class="stat-value">20+ компаний</div></div>
+    <div class="stat"><div class="stat-label">Срок MVP</div><div class="stat-value">4 недели</div></div>
+    <div class="stat"><div class="stat-label">Инвестиции в MVP</div><div class="stat-value">308 000 ₽</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Боль рынка и решение</h2>
+  <div class="problem-box">
+    <strong>Лид обрабатывается 3-4 дня — 40% клиентов уходят к конкурентам.</strong>
+    Проектировщик рисует планировку 4 часа → геодезист делает разбивочный план → сметчик вручную считает площади в Excel 2-3 дня. Одна правка клиента — весь цикл запускается заново.
+  </div>
+  <div class="solution-box">
+    <strong>АСОБ Облако делает весь цикл за часы.</strong>
+    AI-vision читает планировку → подбирает варианты из библиотеки тенанта → калькулятор подставляет цены → менеджер визирует → клиент получает PDF-смету в своём личном кабинете. При правке — новая итерация за минуты, не дни.
+  </div>
+</section>
+
+<section>
+  <h2>Тест современных моделей — генерация плана</h2>
+  <p>Протестировали две модели на одной задаче, чтобы показать текущий уровень AI-моделей для архитектурных эскизов. Результаты прямо влияют на то, что попадает в MVP.</p>
+  
+  <div class="test-section">
+    <div class="test-prompt-label">Промпт</div>
+    <div class="test-prompt">Сгенерируй эскиз одноэтажного дома 110 м², 3 спальни, материал стен газоблок, минимализм, терраса, двускатная крыша, мастер-спальня с санузлом</div>
+    
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-head">
+          <div class="compare-model">Qwen VL</div>
+          <div class="verdict verdict-bad">Непригодно</div>
+        </div>
+        <img src="qwen-gen.png" alt="Генерация Qwen VL" class="compare-image">
+        <div class="compare-notes">
+          <strong>Что не так:</strong> Разбитая геометрия, половина комнат без связи с остальным домом, нереалистичные размеры (3300×3910 для спальни рядом с 1200×1400). Планировка не читается как цельный дом.
+        </div>
+        <div class="compare-meta">
+          <span><strong>Цена:</strong> бесплатно</span>
+          <span><strong>Качество:</strong> 2 из 5</span>
+        </div>
+      </div>
+      
+      <div class="compare-card">
+        <div class="compare-head">
+          <div class="compare-model">Gemini 3 Pro Image</div>
+          <div class="verdict verdict-ok">Пригодно для MVP</div>
+        </div>
+        <img src="gemini-gen.png" alt="Генерация Gemini 3 Pro" class="compare-image">
+        <div class="compare-notes">
+          <strong>Что получилось:</strong> Профессиональный эскизный чертёж с осями 1-4 и А-Б, размерными цепочками, масштабом 1:100, штампом «для сметы», пометками материалов. Мастер-спальня 16.2 м² с С/У рядом, кухня-гостиная 38.5 м² с террасой, 3 спальни, тамбур, тех.помещение, крыльцо. Годится как первичное предложение клиенту. Для строительства — финальная рабочая документация у архитектора тенанта.
+        </div>
+        <div class="compare-meta">
+          <span><strong>Цена:</strong> ~$0.10 за генерацию</span>
+          <span><strong>Качество:</strong> 5 из 5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="info-box">
+    <strong>Вывод для MVP:</strong> используем Gemini 3 Pro Image. Qwen оставляем как дешёвый fallback для черновых набросков. Все результаты AI-генерации проходят визирование менеджера перед отправкой клиенту.
+  </div>
+</section>
+
+<section>
+  <h2>Тест редактирования существующего плана</h2>
+  <p>Вторая ключевая задача — когда клиент хочет изменить типовой проект из библиотеки. Редактирование сложнее генерации, потому что модель должна сохранить всё что клиент не просил трогать.</p>
+  
+  <div class="test-section">
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-head">
+          <div class="compare-model">Исходный проект</div>
+          <div class="verdict verdict-neutral">Оригинал</div>
+        </div>
+        <img src="original.jpg" alt="Оригинальная планировка" class="compare-image">
+        <div class="compare-notes">
+          Одноэтажный дом 111 м², 9 комнат: 3 спальни, 2 С/У, гостиная, кухня, котельная, гардеробная. Размеры 13.76 × 11.08 м.
+        </div>
+      </div>
+    </div>
+    
+    <div class="test-prompt-label" style="margin-top: 28px;">Промпт редактирования</div>
+    <div class="test-prompt">Убери перегородку справа от обеденного стола</div>
+    
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-head">
+          <div class="compare-model">Qwen VL — попытка редактирования</div>
+          <div class="verdict verdict-bad">Непригодно</div>
+        </div>
+        <img src="qwen-edit.jpg" alt="Попытка редактирования Qwen" class="compare-image">
+        <div class="compare-notes">
+          <strong>Что сломалось:</strong> Qwen не убрал указанную перегородку, а перерисовал пол-дома. Исчезли котельная (6.2 м²), гардеробная (4.14 м²), левый С/У (4.4 м²), спальня слева. Модель не справилась с задачей точечной правки.
+        </div>
+        <div class="compare-meta">
+          <span><strong>Сохранность:</strong> 5 комнат из 9</span>
+          <span><strong>Качество:</strong> 1 из 5</span>
+        </div>
+      </div>
+      
+      <div class="compare-card">
+        <div class="compare-head">
+          <div class="compare-model">Gemini 3 Pro Image</div>
+          <div class="verdict verdict-ok">Точечная правка</div>
+        </div>
+        <img src="gemini-edit.png" alt="Редактирование Gemini" class="compare-image">
+        <div class="compare-notes">
+          <strong>Как это работает:</strong> Перегородка убрана, все 9 комнат сохранены, гостиная увеличилась с 27.91 до 33.58 м² — корректный пересчёт площади. Модель удерживает контекст исходного плана и вносит только запрошенную правку. Для страховки — итоговая версия идёт через визирование менеджера.
+        </div>
+        <div class="compare-meta">
+          <span><strong>Цена:</strong> ~$0.10 за правку</span>
+          <span><strong>Качество:</strong> 5 из 5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="info-box">
+    <strong>Критически важное решение архитектуры:</strong> AI отвечает не только картинкой, но и <strong>текстом</strong>. Перед генерацией Gemini 3 Pro (reasoning) анализирует JSON планировки и объясняет клиенту: «Увеличить террасу до 25 м² возможно за счёт сокращения гостиной. Или посмотрите проект №47 — там терраса 28 м² сразу». Только потом, если клиент согласен, запускается Image-генерация.
+  </div>
+</section>
+
+<section>
+  <h2>Экономика AI-операций для одного тенанта</h2>
+  <p>Реальные расходы строительной компании на AI при активной работе с клиентами. Цифры из API Gemini, актуальны на апрель 2026.</p>
+  
+  <div class="economy">
+    <table>
+      <thead>
+        <tr>
+          <th>Операция</th>
+          <th>Модель</th>
+          <th class="num">Цена за 1 раз</th>
+          <th class="num">В месяц при 30 клиентах</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Чтение экспликации (Vision)</td>
+          <td>Gemini 3 Pro</td>
+          <td class="num">$0.02</td>
+          <td class="num">$0.60</td>
+        </tr>
+        <tr>
+          <td>Подбор 5 проектов (RAG)</td>
+          <td>Gemini Flash + embeddings</td>
+          <td class="num">$0.01</td>
+          <td class="num">$0.30</td>
+        </tr>
+        <tr>
+          <td>Редакция плана (текст)</td>
+          <td>Gemini 3 Pro reasoning</td>
+          <td class="num">$0.03</td>
+          <td class="num">$0.90</td>
+        </tr>
+        <tr>
+          <td>Редакция плана (картинка)</td>
+          <td>Nano Banana Pro</td>
+          <td class="num">$0.10</td>
+          <td class="num">$3.00</td>
+        </tr>
+        <tr>
+          <td>Анализ эргономики</td>
+          <td>Gemini 3 Pro</td>
+          <td class="num">$0.02</td>
+          <td class="num">$0.60</td>
+        </tr>
+        <tr>
+          <td>Расстановка мебели</td>
+          <td>Gemini Flash</td>
+          <td class="num">$0.01</td>
+          <td class="num">$0.30</td>
+        </tr>
+        <tr>
+          <td>Голос → текст</td>
+          <td>Groq Whisper</td>
+          <td class="num">бесплатно</td>
+          <td class="num">$0</td>
+        </tr>
+        <tr class="total">
+          <td>Итого AI-расходов</td>
+          <td></td>
+          <td class="num">~$0.19</td>
+          <td class="num">~$5.70</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="info-box">
+    AI-расходы тенанта — копейки в масштабе его бизнеса. При 30 активных клиентах в месяц — около $6 на всю AI-инфраструктуру.
+  </div>
+</section>
+
+<section>
+  <h2>Архитектура — один продукт, два интерфейса</h2>
+  <p>Сайты строительных компаний остаются их собственными. Мы даём виджет-кнопку 5 строк JS. Всё остальное живёт на платформе asob.cloud с жёсткой изоляцией данных между тенантами через PostgreSQL Row-Level Security.</p>
+  
+  <div class="arch-diagram">
+    <div class="arch-grid">
+      <div class="arch-col">
+        <h4>Сайты тенантов</h4>
+        <div class="arch-block tenant">rusich.ru<small>виджет "Рассчитать"</small></div>
+        <div class="arch-block tenant">stroy-village.ru<small>виджет "Рассчитать"</small></div>
+        <div class="arch-block tenant">+20 тенантов<small>B2B подписка</small></div>
+      </div>
+      <div class="arch-col">
+        <h4>Платформа asob.cloud</h4>
+        <div class="arch-block primary">Backend FastAPI<small>API, AI-оркестрация</small></div>
+        <div class="arch-block primary">PostgreSQL + RLS<small>изоляция тенантов</small></div>
+        <div class="arch-block primary">pgvector + S3<small>поиск, файлы</small></div>
+        <div class="arch-block primary">Gemini 3 Pro<small>vision, reasoning, image</small></div>
+      </div>
+      <div class="arch-col">
+        <h4>Пользователи</h4>
+        <div class="arch-block user">ЛК клиента<small>бренд стройкомпании</small></div>
+        <div class="arch-block user">Админка тенанта<small>менеджер, архитектор, admin</small></div>
+      </div>
+    </div>
+  </div>
+  
+  <p style="font-size: 13px; color: var(--text-muted);">Физлицо попадает в ЛК через виджет на сайте стройкомпании, прямую ссылку от менеджера или через самостоятельную регистрацию. Весь интерфейс оформлен в бренде стройкомпании — клиент не знает о существовании АСОБ.</p>
+</section>
+
+<section>
+  <h2>Два интерфейса — макеты</h2>
+  <p>Две роли, два экрана. Бэкенд один, БД одна, AI-функции одинаковые. Разница — в правах доступа и наборе инструментов.</p>
+  
+  <div class="mockup-grid">
+    
+    <div class="mockup-wrap">
+      <div class="mockup-label">Интерфейс 1 · Личный кабинет клиента</div>
+      <div class="mockup client-mockup">
+        <div class="mockup-browser-bar">
+          <div class="mockup-dots"><span></span><span></span><span></span></div>
+          <div class="mockup-url">dom.rusich.ru</div>
+        </div>
+        <div class="mockup-body">
+          <div class="m-header">
+            <div class="m-brand">⬡ Rusich Дома</div>
+            <div class="m-user">А. Петров</div>
+          </div>
+          <div class="m-project-card">
+            <div class="m-title">Одноэтажный дом 110 м²</div>
+            <div class="m-meta">3 спальни · газоблок · терраса · 6.4М ₽</div>
+          </div>
+          <div class="m-chat">
+            <div class="m-msg them">Здравствуйте! Подобрал для вас 3 проекта под ваши параметры. Посмотрите первый — он с большой гостиной.</div>
+            <div class="m-msg me">Хочу террасу побольше, метров 25</div>
+            <div class="m-msg them">Увеличить террасу до 25 м² возможно за счёт сокращения гостиной с 27.9 до 17 м². Рекомендую проект №47 — там терраса 28 м² сразу.</div>
+          </div>
+          <div class="m-input">
+            <span>Напишите сообщение...</span>
+            <span class="m-input-mic">⬤</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mockup-wrap">
+      <div class="mockup-label">Интерфейс 2 · Админка тенанта</div>
+      <div class="mockup admin-mockup">
+        <div class="mockup-browser-bar">
+          <div class="mockup-dots"><span></span><span></span><span></span></div>
+          <div class="mockup-url">rusich.asob.cloud/admin</div>
+        </div>
+        <div class="mockup-body">
+          <div class="m-sidebar-layout">
+            <div class="m-sidebar">
+              <div class="m-sidebar-item active">Проекты</div>
+              <div class="m-sidebar-item">Клиенты</div>
+              <div class="m-sidebar-item">Библиотека</div>
+              <div class="m-sidebar-item">Прайсы</div>
+              <div class="m-sidebar-item">Команда</div>
+              <div class="m-sidebar-item">Бренд</div>
+            </div>
+            <div>
+              <table>
+                <tr><th>Клиент</th><th>Проект</th><th>Статус</th></tr>
+                <tr><td>А. Петров</td><td>Дом 110м²</td><td><span class="pill pill-wait">На визировании</span></td></tr>
+                <tr><td>М. Иванов</td><td>Дом 95м²</td><td><span class="pill pill-active">AI-диалог</span></td></tr>
+                <tr><td>К. Сидоров</td><td>Дом 160м²</td><td><span class="pill pill-ok">Одобрено</span></td></tr>
+                <tr><td>Р. Козлов</td><td>Дом 120м²</td><td><span class="pill pill-active">AI-диалог</span></td></tr>
+                <tr><td>И. Морозов</td><td>Дом 85м²</td><td><span class="pill pill-ok">Одобрено</span></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: -8px;">Схематичные мокапы. Финальный дизайн будет адаптивным и кастомизированным под бренд тенанта.</p>
+</section>
+
+<section>
+  <h2>Воронка клиента — 6 шагов</h2>
+  <p>От первого касания с сайтом стройкомпании до получения PDF-сметы. В среднем — часы, не дни.</p>
+  
+  <div class="funnel">
+    <div class="funnel-step">
+      <div class="num">01</div>
+      <div class="title">Касание с сайтом</div>
+      <div class="desc">Физлицо заходит на сайт стройкомпании, смотрит проекты</div>
+    </div>
+    <div class="funnel-step">
+      <div class="num">02</div>
+      <div class="title">Вход в ЛК</div>
+      <div class="desc">Нажимает виджет-кнопку, попадает в ЛК с брендом компании</div>
+    </div>
+    <div class="funnel-step">
+      <div class="num">03</div>
+      <div class="title">Диалог с AI</div>
+      <div class="desc">Выбирает проект или заполняет анкету, AI подбирает варианты</div>
+    </div>
+    <div class="funnel-step">
+      <div class="num">04</div>
+      <div class="title">Редакция</div>
+      <div class="desc">AI предлагает правки текстом или генерит эскиз через Gemini</div>
+    </div>
+    <div class="funnel-step">
+      <div class="num">05</div>
+      <div class="title">Визирование</div>
+      <div class="desc">Менеджер проверяет расчёт и одобряет отправку сметы</div>
+    </div>
+    <div class="funnel-step">
+      <div class="num">06</div>
+      <div class="title">PDF клиенту</div>
+      <div class="desc">Клиент получает готовое КП с брендом компании</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>5 AI-функций со стеком под задачей</h2>
+  <p>Все функции входят в MVP. Каждая имеет свой вход, выход, AI-модель и паттерн применения.</p>
+  
+  <div class="ai-table">
+    <div class="ai-row head">
+      <div>Функция</div><div>Вход</div><div>Выход</div><div>Стек</div>
+    </div>
+    <div class="ai-row">
+      <div>
+        <div class="ai-name">1. Редакция типового проекта</div>
+        <div class="ai-small">клиент хочет изменить проект</div>
+      </div>
+      <div>Карточка проекта из библиотеки (JSON) + пожелание клиента текстом или голосом</div>
+      <div>Обновлённый эскиз + текстовая рекомендация что возможно/невозможно конструктивно</div>
+      <div>
+        <span class="stack-tag">Gemini 3 Pro</span>
+        <span class="stack-tag">Nano Banana Pro</span>
+        <span class="stack-tag">reasoning+image</span>
+      </div>
+    </div>
+    <div class="ai-row">
+      <div>
+        <div class="ai-name">2. Подбор новых проектов</div>
+        <div class="ai-small">клиент без готового выбора</div>
+      </div>
+      <div>Анкета клиента: площадь, этажность, спальни, бюджет, стиль, материал</div>
+      <div>3-5 вариантов из библиотеки тенанта с описанием и параметрами</div>
+      <div>
+        <span class="stack-tag">pgvector RAG</span>
+        <span class="stack-tag">text-embedding-004</span>
+        <span class="stack-tag">Gemini Flash re-rank</span>
+      </div>
+    </div>
+    <div class="ai-row">
+      <div>
+        <div class="ai-name">3. Анализ эргономики</div>
+        <div class="ai-small">проверка по ГОСТ/СНиП</div>
+      </div>
+      <div>JSON планировки (комнаты, размеры, окна, двери) + правила тенанта</div>
+      <div>Список проблем и правок: узкие проходы, плохое расположение, нет света</div>
+      <div>
+        <span class="stack-tag">Gemini 3 Pro</span>
+        <span class="stack-tag">structured output</span>
+        <span class="stack-tag">ГОСТ rules</span>
+      </div>
+    </div>
+    <div class="ai-row">
+      <div>
+        <div class="ai-name">4. Расстановка мебели</div>
+        <div class="ai-small">планировочное решение</div>
+      </div>
+      <div>Размеры помещений + функции + ГОСТ по проходам и зонам</div>
+      <div>Схематичное описание расстановки мебели и техники</div>
+      <div>
+        <span class="stack-tag">Gemini 3 Pro</span>
+        <span class="stack-tag">ergonomics rules</span>
+      </div>
+    </div>
+    <div class="ai-row">
+      <div>
+        <div class="ai-name">5. Разбивочный план участка</div>
+        <div class="ai-small">размещение объектов</div>
+      </div>
+      <div>Размеры участка + пожелания (дом, парковка, баня, септик)</div>
+      <div>Описание расположения объектов с учётом нормативов отступов</div>
+      <div>
+        <span class="stack-tag">Gemini 3 Pro</span>
+        <span class="stack-tag">СНиП rules</span>
+      </div>
+    </div>
+    <div class="ai-row">
+      <div>
+        <div class="ai-name">+ Смета (не AI)</div>
+        <div class="ai-small">детерминированный калькулятор</div>
+      </div>
+      <div>JSON планировки от AI Vision + прайс тенанта + техкарты</div>
+      <div>PDF-смета с брендом тенанта, погрешность ≤3% при корректном прайсе</div>
+      <div>
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">ReportLab</span>
+        <span class="stack-tag">pandas</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Что тенант загружает при онбординге</h2>
+  <p>Настройка нового клиента — 4-6 часов его менеджера + 1-2 дня работы с нашей стороны.</p>
+  
+  <div class="onboard">
+    <div class="onboard-item">
+      <strong>Прайс-лист работ</strong>
+      <span>Excel, ~300-500 позиций с единицами измерения и ценами</span>
+    </div>
+    <div class="onboard-item">
+      <strong>Прайс-лист материалов</strong>
+      <span>Excel, аналогично — загружается через pandas → JSON</span>
+    </div>
+    <div class="onboard-item">
+      <strong>Библиотека проектов</strong>
+      <span>20-50 типовых объектов: картинка + экспликация + параметры</span>
+    </div>
+    <div class="onboard-item">
+      <strong>Бренд-пак</strong>
+      <span>Логотип, цвета, реквизиты, подпись директора для PDF</span>
+    </div>
+    <div class="onboard-item">
+      <strong>Правила эргономики</strong>
+      <span>Если отличаются от базовой таблицы СНиП/СанПиН</span>
+    </div>
+    <div class="onboard-item">
+      <strong>Техкарты работ</strong>
+      <span>Рецепты: штукатурка = грунт×2 + маяки + шпатлёвка + покраска</span>
+    </div>
+    <div class="onboard-item">
+      <strong>Коэффициенты</strong>
+      <span>Наценка, НДС, сезонный, бригадный, региональный</span>
+    </div>
+    <div class="onboard-item">
+      <strong>Виджет на сайт</strong>
+      <span>5 строк JS-кода — вставляются в шаблон их сайта</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Roadmap — 4 недели MVP</h2>
+  <p>По одной неделе на каждый блок. С 3-й недели подключается реальный клиент из Московской области — отлаживаем на живых данных.</p>
+  
+  <div class="roadmap">
+    <div class="week">
+      <div class="week-num">Неделя 1</div>
+      <h4>Инфраструктура + базовый каркас</h4>
+      <ul>
+        <li>FastAPI + Postgres</li>
+        <li>Мультитенант RLS</li>
+        <li>JWT, S3</li>
+        <li>Базовые CRUD</li>
+        <li>Развёртывание на Contabo</li>
+      </ul>
+    </div>
+    <div class="week">
+      <div class="week-num">Неделя 2</div>
+      <h4>UI-ядро + калькулятор</h4>
+      <ul>
+        <li>ЛК клиента: чат, файлы</li>
+        <li>Админка тенанта</li>
+        <li>Калькулятор сметы</li>
+        <li>PDF-рендер с брендом</li>
+        <li>Импорт прайса Excel</li>
+      </ul>
+    </div>
+    <div class="week">
+      <div class="week-num">Неделя 3</div>
+      <h4>AI-функции + подключение клиента</h4>
+      <ul>
+        <li>Vision для экспликаций</li>
+        <li>RAG-подбор проектов</li>
+        <li>Редакция через Gemini</li>
+        <li>Голос через Groq Whisper</li>
+        <li>Клиент из МО на тесте</li>
+      </ul>
+    </div>
+    <div class="week">
+      <div class="week-num">Неделя 4</div>
+      <h4>Эргономика + запуск</h4>
+      <ul>
+        <li>Анализ по ГОСТ</li>
+        <li>Мебель и разбивочный план</li>
+        <li>Визирование менеджера</li>
+        <li>Отладка промптов</li>
+        <li>Запуск production</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Цены и сроки</h2>
+  
+  <div class="price-grid">
+    <div class="price-card highlight">
+      <h4>MVP со всеми 5 AI-функциями</h4>
+      <div class="price">308 000 ₽</div>
+      <div class="period">25 рабочих дней · 4 календарные недели · 1 разработчик</div>
+      <ul>
+        <li>Backend FastAPI + Postgres + S3</li>
+        <li>ЛК клиента с чатом и голосом</li>
+        <li>Админка тенанта с визированием</li>
+        <li>Калькулятор сметы и PDF-рендер</li>
+        <li>Все 5 AI-функций по ТЗ</li>
+        <li>Подключение первого клиента из МО</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <h4>Расширение и правки</h4>
+      <div class="price">100 800 ₽</div>
+      <div class="period">после запуска MVP</div>
+      <ul>
+        <li>Второй тенант</li>
+        <li>Интеграции (1С и др.)</li>
+        <li>Доработки UX</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div style="background: var(--bg-soft); padding: 20px 24px; border-radius: 12px; font-size: 14px; color: var(--text); margin-top: 16px;">
+    <strong style="font-weight: 500;">Себестоимость инфраструктуры платформы:</strong> €34-51/мес на старте (VPS, S3, Gemini API, домен). При росте до 20 тенантов — €170-255/мес. Эти расходы ложатся на владельца платформы и окупаются из подписок тенантов.
+  </div>
+</section>
+
+<section>
+  <h2>Что принципиально НЕ делаем в MVP</h2>
+  <p>Честная граница зоны ответственности — снимает риски для обеих сторон.</p>
+  <ul style="list-style: none; padding: 0; margin-top: 16px;">
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-muted);">
+      <strong style="color: var(--text); font-weight: 500;">Генерация CAD-файлов</strong> (Archicad/Revit) — финальная рабочая документация создаётся архитектором тенанта
+    </li>
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-muted);">
+      <strong style="color: var(--text); font-weight: 500;">2D-редактор планировок</strong> в браузере — в Этап 2 если клиенты реально попросят (~45 000 ₽)
+    </li>
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-muted);">
+      <strong style="color: var(--text); font-weight: 500;">Парсинг сторонних сайтов</strong> (Goodwood, SK4) — юридический риск, библиотека только тенанта
+    </li>
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-muted);">
+      <strong style="color: var(--text); font-weight: 500;">Интеграция с 1С</strong> — опциональная услуга (~35 000 ₽ с тенанта), не у всех есть 1С
+    </li>
+    <li style="padding: 8px 0; font-size: 14px; color: var(--text-muted);">
+      <strong style="color: var(--text); font-weight: 500;">Мобильное приложение</strong> — только адаптивный веб; 3D-рендер дома — сторонние сервисы
+    </li>
+  </ul>
+</section>
+
+<footer>
+  Geron Labs · AI Automation &amp; Engineering<br>
+  <a href="https://geronlabs.ru">geronlabs.ru</a> · <a href="https://t.me/geronlabs_serg">@geronlabs_serg</a><br>
+  Документ версия 1.1 · 20 апреля 2026 · подготовлен по проекту АСОБ Облако
+</footer>
+
+</div>
+</body>
+</html>
